@@ -88,7 +88,6 @@ export const approveProduct = async (req, res) => {
     }
 
 };
-
 export const getApprovalPendingProducts = async (req, res) => {
 
     const admin_id = req.user.admin_id;
@@ -99,14 +98,41 @@ export const getApprovalPendingProducts = async (req, res) => {
 
     try {
 
-        const result = await db.query(
+        const productsResult = await db.query(
         `SELECT * FROM products WHERE status = $1`,
         ['approval-pending']
         );
 
+        const products = productsResult.rows;
+
+        if (products.length === 0) {
+          return res.status(200).json({
+            message: 'Approval-pending products retrieved successfully',
+            products: [],
+          });
+        }
+
+        const productIds = products.map((p) => p.product_id);
+
+        const imagesResult = await db.query(
+          `SELECT product_id, image_url FROM product_images WHERE product_id = ANY($1) ORDER BY image_id ASC`,
+          [productIds]
+        );
+
+        const imageMap = {};
+        for (const row of imagesResult.rows) {
+          if (!imageMap[row.product_id]) imageMap[row.product_id] = [];
+          imageMap[row.product_id].push(row.image_url);
+        }
+
+        const enrichedProducts = products.map((product) => ({
+          ...product,
+          image: (imageMap[product.product_id] || [])[0] || null,
+        }));
+
         res.status(200).json({
         message: 'Approval-pending products retrieved successfully',
-        products: result.rows,
+        products: enrichedProducts,
         });
 
     } 
