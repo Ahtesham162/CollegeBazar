@@ -1,5 +1,48 @@
-# 🎓 CollegeBazaar
+# CollegeBazaar
 
-A **college-based marketplace** built to help students **buy, sell, and exchange** goods within the campus community. Whether it’s textbooks, electronics, or hostel essentials, CollegeBazaar makes it easy and secure to trade with fellow students.
+A campus marketplace web app where students can list, browse, and bid on items. Built with a React (Vite) frontend and an Express + PostgreSQL backend.
 
-🚀 **Live Demo**: [https://collegebazaariiita.vercel.app]
+**Live demo:** [college-bazar-three.vercel.app](https://college-bazar-three.vercel.app)
+
+## Features
+
+- Email/password authentication with OTP verification, restricted to campus email domains
+- Google OAuth login as an alternative sign-in method
+- List, browse, and bid on items in a campus-only marketplace
+- Image uploads via Cloudinary
+- Automated cron jobs for product status updates
+- Admin dashboard for moderation
+- Query/support ticket system between buyers, sellers, and admins
+
+## Tech Stack
+
+**Frontend:** React (Vite), React Router, Axios, GSAP
+**Backend:** Node.js, Express, PostgreSQL
+**Auth:** JWT, Google OAuth 2.0
+**Infra:** Cloudinary (image storage), Nodemailer (email/OTP), node-cron (scheduled jobs)
+**Deployment:** Vercel (frontend), Render (backend + PostgreSQL)
+
+## Structure
+
+- `frontend/` — React + Vite client
+- `backend/` — Express REST API + PostgreSQL
+
+## Setup
+
+### Backend
+
+\`\`\`bash
+cd backend
+npm install
+cp .env_example .env   # fill in DATABASE_URL, JWT_SECRET, GOOGLE_CLIENT_ID, etc.
+npm start
+\`\`\`
+
+### Frontend
+
+\`\`\`bash
+cd frontend
+npm install
+cp .env.example .env   # fill in VITE_API_URL, VITE_GOOGLE_CLIENT_ID
+npm run dev
+\`\`\`
